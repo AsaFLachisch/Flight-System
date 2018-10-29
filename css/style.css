@@ -11,7 +11,7 @@
       }
 #locationField, .controls {
     position: relative;
-    width: 16%;
+    width: 30%;
   }
   .label {
     text-align: right;
@@ -19,25 +19,28 @@
     width: 100px;
     color: #303030;
   }
-  #address {
+  #hotelName {
     border: 1px solid #000090;
     background-color: #f0f0ff;
     width: 480px;
     padding-right: 2px;
   }
-  #address td {
+  #hotelName td {
     font-size: 10pt;
   }
   .field {
     width: 99%;
   }
   .slimField {
-    width: 80px;
+    width: 20%;
   }
   .wideField {
-    width: 200px;
+    width: 80%;
   }
   #locationField {
     height: 20px;
     margin-bottom: 2px;
+  }
+  .container {
+      padding-top: 2%;
   }
