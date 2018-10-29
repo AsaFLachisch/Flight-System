@@ -1,0 +1,27 @@
+{
+  "name": "flight-system",
+  "version": "1.0.0",
+  "description": "Flight System to Yaeli",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run lite",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lite": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Flight System"
+  },
+  "keywords": [
+    "Flight",
+    "System"
+  ],
+  "author": "Asaf Lachisch",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.4.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.1.3"
+  }
+}
