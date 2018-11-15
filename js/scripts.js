@@ -145,8 +145,9 @@ function addArrival() {
     $('#airportRow' + rowNum).append('<table class="table" id="additionTable' + rowNum + '"><tr>' +
         '<td class="label">Origin Selection:</td>' +
         '<td><div class="dropdown">' +
-        '<button class="btn btn-secondary dropbtn dropdown-toggle" id="ddmb' + rowNum + '" type="button">Choose Origin</button>' +
-        '<div class="dropdown-menu dropdown-content" id="content' + rowNum + '"></div></div></td>' +
+            '<button class="btn dropbtn dropdown-toggle" id="ddmb' + rowNum + '" type="button"'+
+            ' data-toggle="dropdown">Choose Origin<span class="caret"></span></button>' +
+            '<ul class="dropdown-menu" id="content' + rowNum + '"></ul></div></td>' +
         '<td class="label">Airport Name</td>' +
         '<td class="wideField" colspan="1"> <input type="text" name="airport[]" id="airportName' + rowNum +
         '" placeholder="Airport Name" class="form-control name_list controls field"></td>' +
@@ -168,8 +169,9 @@ function addDeparture() {
         '" placeholder="Airport Name" class="form-control name_list controls field"></td>' +
         '<td class="label">Destination Selection:</td>' +
         '<td><div class="dropdown">' +
-        '<button class="btn btn-secondary dropbtn dropdown-toggle" id="ddmb' + rowNum + '" type="button">Choose Destination</button>' +
-        '<div class="dropdown-menu dropdown-content" id="content' + rowNum + '"></div></div></td>' +
+            '<button class="btn dropbtn dropdown-toggle" id="ddmb' + rowNum + '" type="button"'+
+            ' data-toggle="dropdown">Choose Destination<span class="caret"></span></button>' +
+            '<ul class="dropdown-menu" id="content' + rowNum + '"></ul></div></td>' +
         '</tr><tr id="ETA' + rowNum + '">' +
         '<td class="label">Time of Arrival:</td>' +
         '<td> <input id="arrd' + rowNum + '" class="form-control name_list arrival_date" type="date">' +
@@ -186,12 +188,12 @@ function addDropdown() {
     $('#content' + button_num).empty();
     for (i = 0; i <= h; i++) {
         var hotelLocation = document.getElementById('hotelLocation' + i + '');
-        var val = document.getElementById('hotelName' + i + '')
+        var val = document.getElementById('hotelName' + i + '');
         if (val != null && hotelLocation != null) {
             val = val.value;
             hotelLocation = hotelLocation.value;
             if (val != '' && hotelLocation != '') {
-                $('#content' + button_num + '').append('<a data-toggle="dropdown" class="dropdown-toggle" id="ddih' + button_num + '' + i + '">' + val + '</a>')
+                $('#content' + button_num + '').append('<li><a class="dropdown-item" id="ddih' + button_num + '' + i + '">' + val + '</a></li>')
             }
         }
     }
@@ -202,28 +204,33 @@ function addDropdown() {
             val = val.value;
             scheduleLocation = scheduleLocation.value;
             if (val != '' && scheduleLocation != '') {
-                $('#content' + button_num + '').append('<a data-toggle="dropdown" class="dropdown-toggle" id="ddis' + button_num + '' + i + ' ">' + val + '</a>')
+                $('#content' + button_num + '').append('<li><a class="dropdown-item" id="ddis' + button_num + '' + i + ' ">' + val + '</a></li>')
             }
         }
     }
 
-    $('#content' + button_num + '').dropdown();
 }
 
-function hideDropdown() {
-    if (!event.target.matches('.dropbtn')) {
-
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
-    }
+function dateStringWithoutTimeZone(a) {
+    var dateVal = new Date(document.getElementById('arrd' + a).value);
+    var timeVal = document.getElementById('arrt' + a).value;
+    var day = dateVal.getDate();
+    var month = dateVal.getMonth();
+    var year = dateVal.getFullYear();
+    var hours = timeVal.split(":")[0];
+    var minutes = timeVal.split(":")[1];
+    var weekDay = dateVal.getDay();
+    var wordDay;
+    if (weekDay=='0')    {wordDay =  "Sunday";}
+    if (weekDay=='1')    {wordDay = "Monday";}
+    if (weekDay=='2')    {wordDay = "Tuesday";}
+    if (weekDay=='3')    {wordDay = "Wednesday";}
+    if (weekDay=='4')    {wordDay = "Thursday";}
+    if (weekDay=='5')    {wordDay = "Friday";}
+    if (weekDay=='6')    {wordDay = "Saturday";}
+    var completeString = ''+wordDay+', '+day+'/'+month+'/'+year+', in '+hours+':'+minutes;
+    return completeString;
 }
-
 
 function getDateFromInput(a) {
 
@@ -235,13 +242,14 @@ function getDateFromInput(a) {
     var hours = timeVal.split(":")[0];
     var minutes = timeVal.split(":")[1];
     var givenDate = new Date(year, month, day, hours, minutes);
+
     return givenDate;
 }
 function isValidDate(d) {
     return d instanceof Date && !isNaN(d);
 }
 
-function getGooglePlaceID() {
+function addETA() {
     var ddi = $(this).attr("id");
     var button_num = ddi[5];
     if (isValidDate(getDateFromInput(button_num))) {
@@ -264,9 +272,6 @@ function getGooglePlaceID() {
                 transitOptions: {
                     arrivalTime: getDateFromInput(button_num) // **************************NEED TO MAKE IT ACCORDING TO LOCAL TIME ZONE***********
                 }
-                // drivingOptions: {
-                //     trafficModel: 'pessimistic' 
-                // }
             }
             var service = new google.maps.DistanceMatrixService();
             service.getDistanceMatrix(dmOptions, function (response, status) {
@@ -275,15 +280,15 @@ function getGooglePlaceID() {
                     var rows = response.rows;
                     var arrivalToAirport = rows[0].elements[0].duration.text;
                     var departureFromAirport = rows[1].elements[1].duration.text;
-                    var arrTime = getDateFromInput(button_num);
+                    var stringifyDate = dateStringWithoutTimeZone(button_num);
                     $('#info').remove();
                     if ($('#arrival' + button_num).is(':checked')) {
                         $('#ETA' + button_num).append('<td colspan="2" id="info">If you want to get to the airport by ' +
-                            arrTime + ', you will need to go out ' + arrivalToAirport + ' upfront.</td>')
+                        stringifyDate + ', you will need to go out ' + arrivalToAirport + ' upfront.</td>')
                     }
                     else {
                         $('#ETA' + button_num).append('<td colspan="2" id="info">If you want to get to ' + desti + ' by ' +
-                            arrTime + ', you will need to go out ' + departureFromAirport + ' upfront from the airport.</td>')
+                        stringifyDate + ', you will need to go out ' + departureFromAirport + ' upfront from the airport.</td>')
                     }
                 }
             })
@@ -311,15 +316,10 @@ function addAirport(a) {
     $(document).on('click', '.arrival', addArrival)
     //If the user clicks on departure:
     $(document).on('click', '.departure', addDeparture)
-    //END OF Add the Airport dynamic table
-
     //Add Dropdown table that composed of the hotels and schedule events the user inserted earlier
-    $(document).on('click', '.dropbtn', addDropdown)
-    //Hide Dropdown table when click on anything but the dropdown
-    $(document).click(hideDropdown);
-
-    //Get Location's Google Place ID
-    $(document).on('click', '.dropdown-item', getGooglePlaceID)
+    $(document).on('click', '.dropbtn', addDropdown) //***Bug needed to be fixed: update the list EVERY TIME when the button clicked */
+    //Add Estimated Time of Arrival
+    $(document).on('click', '.dropdown-item', addETA)
     //Add remove button to Airport       
     $(document).on('click', '.btn_remove_airport', deleteRow)
 }
@@ -328,22 +328,18 @@ function addAirport(a) {
 $(function () { //This is the main function
     $('#addRented').on('click', function () {
         r++;
-        event.preventDefault();
         addRental(r)
     })
     $('#addSchedule').on('click', function () {
         s++;
-        event.preventDefault();
         addSchedule(s, schedulePlacesIDs)
     })
     $('#addHotel').on('click', function () {
         h++;
-        event.preventDefault();
         addHotel(h, hotelPlacesIDs)
     })
     $('#addAirport').on('click', function () {
         a++;
-        event.preventDefault();
         addAirport(a)
     })
 }

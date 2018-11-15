@@ -8,13 +8,15 @@
   <title>Flight System For Yaeli</title>
   <meta name="description" content="System that'll make the booking much easier">
   <meta name="author" content="Asaf Lachisch">
+
   <script src="js/jquery-3.3.1.min.js" async defer></script>
   <script src="js/jquery-ui.min.js" async defer></script>
+  <script src="node_modules/popper.js/dist/popper.min.js" async defer></script>
   <script src="js/scripts.js" async defer></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAe8sF9Lwqp5e11N7ljaUHdFAYfcSmPAXg&libraries=places&language=en"
     async defer></script>
-  <link rel="stylesheet" href="css/jquery-ui.min.css">
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js" async defer></script>
   <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   <link rel="stylesheet" type="text/css" href="css/style.css">
 
@@ -22,46 +24,45 @@
 
 <body>
   <div class="container">
-    <div class="row">
-      <form id="flightForm">
-        <p><input type="text" id="tripPurpuse" placeholder="Purpuse" />
-          <input type="text" id="tripClient" placeholder="Client" /></p>
+    <form id="flightForm">
+      <p><input type="text" id="tripPurpuse" placeholder="Purpuse" />
+        <input type="text" id="tripClient" placeholder="Client" /></p>
 
-        <p><button id="addRented" type="button" class="btn">Add Rented Car</button></p>
-        <div id="rentedCar">
-          <table class="table table-bordered" id="dynamic_carrental">
+      <p><button id="addRented" type="button" class="btn">Add Rented Car</button></p>
+      <div id="rentedCar">
+        <table class="table table-bordered" id="dynamic_carrental">
 
-          </table>
-          <!-- need duration, price and company -->
-        </div>
+        </table>
+        <!-- need duration, price and company -->
+      </div>
 
-        <p><button id="addSchedule" type="button" class="btn">Add Schedule Event</button></p>
-        <div id="schedule">
-          <table class="table table-bordered" id="dynamic_schedule">
+      <p><button id="addSchedule" type="button" class="btn">Add Schedule Event</button></p>
+      <div id="schedule">
+        <table class="table table-bordered" id="dynamic_schedule">
 
-          </table>
-          <!--Need to connect to waze API and conclude when should he be at the airport-->
-        </div>
+        </table>
+        <!--Need to connect to waze API and conclude when should he be at the airport-->
+      </div>
 
-        <p><button id="addHotel" class="btn" type="button">Add Hotel</button></p>
-        <div id="hotel">
-          <table class="table table-bordered" id="dynamic_hotel">
+      <p><button id="addHotel" class="btn" type="button">Add Hotel</button></p>
+      <div id="hotel">
+        <table class="table table-bordered" id="dynamic_hotel">
 
-          </table>
-        </div>
+        </table>
+      </div>
 
-        <p><button id="addAirport" class="btn" type="button">Add Airport</button></p>
-        <div id="airport">
-          <table class="table table-bordered" id="dynamic_airport">
+      <p><button id="addAirport" class="btn" type="button">Add Airport</button></p>
+      <div id="airport">
+        <table class="table table-bordered" id="dynamic_airport">
 
-          </table>
-        </div>
+        </table>
+      </div>
 
-        <p><input type="file" id="myFile" class="btn" /></p>
-        <p><input type="submit" class="btn"></p>
-      </form>
-    </div>
+      <p><input type="file" id="myFile" class="btn" /></p>
+      <p><input type="submit" class="btn"></p>
+    </form>
   </div>
+
 
 
 </body>
